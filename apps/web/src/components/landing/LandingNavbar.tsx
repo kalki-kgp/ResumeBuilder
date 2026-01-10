@@ -28,31 +28,33 @@ export function LandingNavbar() {
             </div>
 
             <div className="hidden md:flex items-center gap-8">
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/features" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Features
                 </Link>
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/jobs" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Jobs
                 </Link>
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/product" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Product
                 </Link>
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/reviews" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Reviews
                 </Link>
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/pricing" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Pricing
                 </Link>
             </div>
 
             <div className="flex items-center gap-4">
-                <Link href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                <Link href="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
                     Login
                 </Link>
-                <Button className="bg-[#2D2E3A] hover:bg-[#3E3F4D] text-white border border-landing-border rounded-lg shadow-[0_0_20px_rgba(124,58,237,0.1)]">
-                    Get Started
-                    <span className="ml-2">»</span>
-                </Button>
+                <Link href="/signup">
+                    <Button className="bg-[#2D2E3A] hover:bg-[#3E3F4D] text-white border border-landing-border rounded-lg shadow-[0_0_20px_rgba(124,58,237,0.1)]">
+                        Get Started
+                        <span className="ml-2">»</span>
+                    </Button>
+                </Link>
             </div>
         </nav>
     );
