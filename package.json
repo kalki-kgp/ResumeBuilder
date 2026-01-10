@@ -1,0 +1,21 @@
+{
+  "name": "monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm run --parallel build",
+    "build:web": "pnpm --filter web build",
+    "lint": "pnpm run --parallel lint",
+    "type-check": "pnpm --filter web type-check",
+    "clean": "pnpm run --parallel clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
