@@ -1,44 +1,78 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { authApi, User } from "@/lib/api";
+import { authApi, resumeApi, User, Resume, DashboardStats } from "@/lib/api";
 import { authStorage } from "@/lib/auth";
+
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { ResumeCard } from "@/components/dashboard/ResumeCard";
 import { CreateResumeCard } from "@/components/dashboard/CreateResumeCard";
-import { Search, Bell, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ATScoreCard } from "@/components/dashboard/ATScoreCard";
+import { JobMatchesWidget } from "@/components/dashboard/JobMatchesWidget";
+import { AISuggestionsWidget } from "@/components/dashboard/AISuggestionsWidget";
+import { Search } from "lucide-react";
 
-// Mock Data for UI demonstration
-const mockResumes = [
-  { id: 1, title: "Software Engineer - Google", lastEdited: "Edited 2 hours ago", thumbnail: "bg-blue-900/20" },
-  { id: 2, title: "Product Manager Role", lastEdited: "Edited 1 day ago", thumbnail: "bg-purple-900/20" },
-  { id: 3, title: "Creative Portfolio", lastEdited: "Edited 3 days ago", thumbnail: "bg-pink-900/20" },
-];
+// Helper to format relative time
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 1) return "just now";
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""} ago`;
+  return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? "s" : ""} ago`;
+}
 
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const refreshData = useCallback(async () => {
+    const token = authStorage.getToken();
+    if (!token) return;
+
+    try {
+      const [resumesData, statsData] = await Promise.all([
+        resumeApi.list(token),
+        resumeApi.getStats(token),
+      ]);
+      setResumes(resumesData.resumes);
+      setStats(statsData);
+    } catch (error) {
+      console.error("Failed to refresh data:", error);
+    }
+  }, []);
 
   useEffect(() => {
-    const loadUser = async () => {
+    const loadData = async () => {
       const token = authStorage.getToken();
       if (!token) {
-        // For development/showcase purposes if auth is skipped, we can mock user or redirect
-        // router.push("/login");
-        // return;
-
-        // MOCK USER FOR DEV
-        setUser({ id: 1, email: "demo@user.com", is_active: true, created_at: new Date().toISOString() });
-        setIsLoading(false);
+        router.push("/login");
         return;
       }
 
       try {
-        const userData = await authApi.getCurrentUser(token);
+        // Fetch user, resumes, and stats in parallel
+        const [userData, resumesData, statsData] = await Promise.all([
+          authApi.getCurrentUser(token),
+          resumeApi.list(token),
+          resumeApi.getStats(token),
+        ]);
         setUser(userData);
+        setResumes(resumesData.resumes);
+        setStats(statsData);
       } catch (error) {
         authStorage.removeToken();
         router.push("/login");
@@ -47,13 +81,46 @@ export default function DashboardPage() {
       }
     };
 
-    loadUser();
+    loadData();
   }, [router]);
 
   const handleLogout = () => {
     authStorage.removeToken();
     router.push("/home");
   };
+
+  const handleUpload = async (file: File) => {
+    const token = authStorage.getToken();
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      // Extract filename without extension for title
+      const title = file.name.replace(/\.[^/.]+$/, "") || "Uploaded Resume";
+
+      // Create resume entry
+      const resume = await resumeApi.create(token, { title });
+
+      // Upload the file (this will trigger ATS analysis)
+      await resumeApi.uploadFile(token, resume.id, file);
+
+      // Refresh the data to show updated resume with ATS score
+      await refreshData();
+    } catch (error) {
+      console.error("Upload failed:", error);
+      // You could add a toast notification here
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Filter resumes by search query
+  const filteredResumes = resumes.filter((resume) =>
+    resume.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (isLoading) {
     return (
@@ -64,94 +131,78 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0C15] flex">
+    <div className="min-h-screen bg-[#0B0C15] flex font-sans">
       <DashboardSidebar userEmail={user?.email} onLogout={handleLogout} />
 
-      {/* Main Content Area */}
-      <main className="flex-1 md:ml-64 relative min-h-screen">
-        {/* Background Glows */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px]" />
-        </div>
+      {/* Main Content Area + Right Panel */}
+      <main className="flex-1 md:ml-64 flex min-h-screen">
 
-        <div className="relative z-10 px-8 py-6">
-          {/* Top Header */}
-          <header className="flex items-center justify-between mb-10">
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-1">
-                Welcome back, {user?.email?.split("@")[0]}
-              </h1>
-              <p className="text-gray-400 text-sm">Here is what&apos;s happening with your resumes.</p>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="relative hidden md:block">
-                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-white/20 w-64 transition-all"
-                />
-              </div>
-              <button className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
-            </div>
-          </header>
-
-          {/* Stats Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-6 text-white relative overflow-hidden group">
-              <div className="relative z-10">
-                <h3 className="text-blue-100/80 font-medium mb-1">Total Resumes</h3>
-                <div className="text-4xl font-bold mb-2">3</div>
-                <div className="text-sm bg-white/20 inline-block px-2 py-0.5 rounded text-white/90">
-                  +1 this week
-                </div>
-              </div>
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-                <Sparkles className="w-24 h-24" />
-              </div>
-            </div>
-
-            <div className="bg-[#12141c] border border-white/5 rounded-2xl p-6 relative overflow-hidden">
-              <h3 className="text-gray-400 font-medium mb-1">Total Views</h3>
-              <div className="text-3xl font-bold text-white mb-2">124</div>
-              <div className="text-sm text-green-400">
-                +12% vs last month
-              </div>
-            </div>
-
-            <div className="bg-[#12141c] border border-white/5 rounded-2xl p-6 relative overflow-hidden">
-              <h3 className="text-gray-400 font-medium mb-1">AI Credits</h3>
-              <div className="text-3xl font-bold text-white mb-2">450</div>
-              <Button size="sm" variant="outline" className="h-7 text-xs border-white/10 bg-white/5 hover:bg-white/10 text-white">
-                Top Up
-              </Button>
-            </div>
+        {/* Middle Column (Main Content) */}
+        <div className="flex-1 p-8 space-y-8 overflow-y-auto">
+          {/* Header */}
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Welcome back, {user?.email?.split("@")[0].split(".")[0]}!
+            </h1>
+            <p className="text-gray-400">Manage your resumes and explore relevant opportunities.</p>
           </div>
 
-          {/* Resumes Grid */}
-          <section>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-white">Recent Resumes</h2>
-              <Button variant="link" className="text-blue-400 hover:text-blue-300">View All</Button>
+          {/* Primary Action Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-64">
+            <CreateResumeCard onUpload={handleUpload} isUploading={isUploading} />
+            <ATScoreCard score={stats?.highest_ats_score ?? 0} />
+          </div>
+
+          {/* Recent Resumes */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-white">
+                Your Resumes {stats && stats.total_resumes > 0 && `(${stats.total_resumes})`}
+              </h2>
+              <div className="relative w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Search resumes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[#12141c] border border-white/5 rounded-lg pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-white/20"
+                />
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <CreateResumeCard />
-              {mockResumes.map(resume => (
-                <ResumeCard
-                  key={resume.id}
-                  title={resume.title}
-                  lastEdited={resume.lastEdited}
-                  thumbnail={resume.thumbnail}
-                />
-              ))}
-            </div>
-          </section>
+            {filteredResumes.length > 0 ? (
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                {filteredResumes.map(resume => (
+                  <ResumeCard
+                    key={resume.id}
+                    id={resume.id}
+                    title={resume.title}
+                    lastEdited={formatRelativeTime(resume.updated_at)}
+                    score={resume.ats_score}
+                    thumbnail={resume.thumbnail_color}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-gray-400 mb-4">
+                  {searchQuery ? "No resumes match your search." : "You haven't created any resumes yet."}
+                </p>
+                {!searchQuery && (
+                  <p className="text-gray-500 text-sm">Click &quot;Create Resume&quot; above to get started!</p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Right Column (Widgets) */}
+        <div className="w-80 border-l border-white/10 bg-[#0B0C15]/50 backdrop-blur-xl p-6 hidden xl:block space-y-8 overflow-y-auto">
+          <JobMatchesWidget />
+          <AISuggestionsWidget />
+        </div>
+
       </main>
     </div>
   );

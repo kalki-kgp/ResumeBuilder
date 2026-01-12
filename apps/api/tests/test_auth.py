@@ -1,44 +1,4 @@
-import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-
-from app.core.database import Base, get_db
-from app.main import app
-from app.models.user import User  # noqa: F401 - Import to register model with Base
-
-# Test database (in-memory SQLite) with StaticPool to ensure single connection
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,  # Use single connection for in-memory database
-)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Create tables once at module level
-Base.metadata.create_all(bind=engine)
-
-
-def override_get_db():
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-app.dependency_overrides[get_db] = override_get_db
-
-
-@pytest.fixture
-def client():
-    yield TestClient(app)
-    # Clean up data after each test
-    with engine.begin() as conn:
-        for table in reversed(Base.metadata.sorted_tables):
-            conn.execute(table.delete())
+"""Tests for authentication endpoints"""
 
 
 def test_signup_success(client):
@@ -47,8 +7,6 @@ def test_signup_success(client):
         "/api/v1/auth/signup",
         json={"email": "test@example.com", "password": "password123"},
     )
-    if response.status_code != 201:
-        print(f"Error response: {response.json()}")
     assert response.status_code == 201
     data = response.json()
     assert "access_token" in data

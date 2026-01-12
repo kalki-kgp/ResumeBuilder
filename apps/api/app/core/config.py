@@ -19,6 +19,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  # Standard expiry
     ACCESS_TOKEN_EXPIRE_MINUTES_REMEMBER: int = 43200  # 30 days for "remember me"
 
+    # Nebius AI
+    NEBIUS_API_KEY: str = ""
+    NEBIUS_BASE_URL: str = "https://api.tokenfactory.nebius.com/v1/"
+    NEBIUS_MODEL: str = "nvidia/Nemotron-Nano-V2-12b"
+
     class Config:
         env_file = ".env"
         case_sensitive = True

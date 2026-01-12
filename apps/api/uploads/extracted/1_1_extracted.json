@@ -1,0 +1,31 @@
+{
+  "contact": {
+    "full_name": "",
+    "email": "",
+    "phone": "",
+    "location": "",
+    "linkedin": "",
+    "github": "",
+    "portfolio": "",
+    "other_links": []
+  },
+  "summary": "",
+  "work_experience": [],
+  "education": [],
+  "technical_skills": [],
+  "soft_skills": [],
+  "skills_by_category": {
+    "Programming Languages": [],
+    "Frameworks": [],
+    "Tools": []
+  },
+  "projects": [],
+  "certifications": [],
+  "languages": [],
+  "publications": [],
+  "awards": [],
+  "volunteer": [],
+  "interests": [],
+  "extraction_version": "1.0",
+  "extracted_at": "2026-01-11T00:40:19.702341"
+}
