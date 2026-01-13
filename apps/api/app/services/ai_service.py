@@ -3,6 +3,7 @@
 import base64
 import io
 import json
+import logging
 import re
 from pathlib import Path
 
@@ -11,6 +12,8 @@ from pdf2image import convert_from_path
 from PIL import Image
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 # System prompts for different AI tasks
 ATS_SYSTEM_PROMPT = """You are an expert ATS (Applicant Tracking System) analyzer. Your job is to evaluate resumes and provide an ATS compatibility score.
@@ -251,7 +254,7 @@ class AIService:
 
             # Call Nebius API
             response = self.client.chat.completions.create(
-                model=settings.NEBIUS_MODEL,
+                model=settings.NEBIUS_VLM_MODEL,
                 messages=[
                     {"role": "system", "content": ATS_SYSTEM_PROMPT},
                     {"role": "user", "content": content},
@@ -307,7 +310,7 @@ class AIService:
 
             # Call Nebius API
             response = self.client.chat.completions.create(
-                model=settings.NEBIUS_MODEL,
+                model=settings.NEBIUS_VLM_MODEL,
                 messages=[
                     {"role": "system", "content": RESUME_SUGGESTIONS_PROMPT},
                     {"role": "user", "content": content},
@@ -356,8 +359,10 @@ class AIService:
             else:
                 content = user_message
 
+            # Use VLM if image provided, otherwise LLM
+            model = settings.NEBIUS_VLM_MODEL if image_path else settings.NEBIUS_LLM_MODEL
             response = self.client.chat.completions.create(
-                model=settings.NEBIUS_MODEL,
+                model=model,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": content},
@@ -398,8 +403,10 @@ class AIService:
             }
 
         try:
+            logger.info(f"Extracting data from: {file_path}")
             # Convert file to base64 images
             base64_images = self._file_to_base64_images(file_path)
+            logger.info(f"Converted to {len(base64_images)} image(s)")
 
             # Build message content with images
             content = [{"type": "text", "text": "Extract all information from this resume:"}]
@@ -409,9 +416,10 @@ class AIService:
                     "image_url": {"url": f"data:image/png;base64,{b64_img}"},
                 })
 
+            logger.info(f"Calling VLM ({settings.NEBIUS_VLM_MODEL}) for extraction...")
             # Call Nebius API
             response = self.client.chat.completions.create(
-                model=settings.NEBIUS_MODEL,
+                model=settings.NEBIUS_VLM_MODEL,
                 messages=[
                     {"role": "system", "content": RESUME_EXTRACTION_PROMPT},
                     {"role": "user", "content": content},
@@ -419,6 +427,7 @@ class AIService:
                 max_tokens=4000,
                 temperature=0.2,  # Lower temperature for more consistent extraction
             )
+            logger.info("Extraction complete, parsing response...")
 
             # Parse response
             result = self._parse_json_response(response.choices[0].message.content or "")
@@ -431,6 +440,7 @@ class AIService:
             return result
 
         except Exception as e:
+            logger.error(f"Extraction failed: {e}")
             return {
                 "error": str(e),
                 "contact": {"full_name": "", "email": "", "phone": "", "location": ""},
@@ -477,8 +487,9 @@ TEMPLATE SCHEMA:
 Map the extracted data to fill the template fields. Return only the filled data JSON.
 """
 
+            logger.info(f"Filling template '{template_schema.get('template_id')}' using LLM ({settings.NEBIUS_LLM_MODEL})...")
             response = self.client.chat.completions.create(
-                model=settings.NEBIUS_MODEL,
+                model=settings.NEBIUS_LLM_MODEL,
                 messages=[
                     {"role": "system", "content": TEMPLATE_FILL_PROMPT},
                     {"role": "user", "content": user_message},
@@ -486,6 +497,7 @@ Map the extracted data to fill the template fields. Return only the filled data 
                 max_tokens=4000,
                 temperature=0.3,
             )
+            logger.info("Template filling complete")
 
             result = self._parse_json_response(response.choices[0].message.content or "")
 
@@ -498,6 +510,7 @@ Map the extracted data to fill the template fields. Return only the filled data 
             }
 
         except Exception as e:
+            logger.error(f"Template filling failed: {e}")
             return {
                 "error": str(e),
                 "data": {},

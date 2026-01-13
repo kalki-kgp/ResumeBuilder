@@ -1,0 +1,277 @@
+{
+  "contact": {
+    "full_name": "Krishna Kamalakar Paikine",
+    "email": "",
+    "phone": "",
+    "location": "",
+    "linkedin": "",
+    "github": "",
+    "portfolio": "",
+    "other_links": []
+  },
+  "summary": "",
+  "work_experience": [
+    {
+      "job_title": "Data Science Intern",
+      "company": "FruitBowl Digital Media",
+      "location": "",
+      "start_date": "May 2025",
+      "end_date": "Aug 2025",
+      "is_current": false,
+      "description": "",
+      "bullet_points": [
+        "Engineered psychological profiles by analyzing conversational data with NLP, embeddings, and multi-domain semantic pipelines",
+        "Built ontology-driven classification with 40k+ facets across psychology, spirituality, and behavior, enhancing profile accuracy",
+        "Designed Neo4j graph database structure to store embeddings and enable similarity search for real-time seeker-facilitator matching",
+        "Delivered scalable data profiling pipeline integrating Python, Flask, and rating systems for adaptive user insights"
+      ],
+      "technologies": [
+        "NLP",
+        "Embeddings",
+        "Multi-domain pipelines",
+        "Neo4j",
+        "Python",
+        "Flask"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.TECH",
+      "institution": "IIT Kharagpur",
+      "location": "",
+      "start_date": "2022",
+      "end_date": "2026",
+      "gpa": "6.11 / 10"
+    },
+    {
+      "degree": "HSC",
+      "institution": "Dr. Babasaheb Ambedkar College, Deekshabhoomi Nagpur",
+      "location": "",
+      "start_date": "2020",
+      "end_date": "2022",
+      "gpa": "78.33%"
+    },
+    {
+      "degree": "SSC",
+      "institution": "Navjeevan Dnyaanpeeth English Medium School, Pusad",
+      "location": "",
+      "start_date": "2020",
+      "end_date": "2020",
+      "gpa": "94.20%"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Sentiment Analysis on Healthcare Apps",
+      "description": "Self Project",
+      "technologies": [
+        "NLP preprocessing",
+        "LDA",
+        "TF-IDF",
+        "TextBlob",
+        "Vader",
+        "Scatter plots",
+        "Heatmaps",
+        "Bar charts"
+      ],
+      "url": "",
+      "bullet_points": [
+        "Conducted large-scale sentiment analysis of 3L+ users across 5 healthcare apps using NLP preprocessing and feature engineering",
+        "Built topic models with Latent Dirichlet Allocation (LDA) and extracted semantic features using TF-IDF for clustering user concerns",
+        "Applied TextBlob and Vader sentiment models to analyze polarity trends, identifying satisfaction levels with actionable insights",
+        "Visualized sentiment distributions using scatter plots, heatmaps, and bar charts for academic research impact"
+      ],
+      "start_date": "Jul 2025",
+      "end_date": "Aug 2025"
+    },
+    {
+      "name": "Stock Price Forecasting with GAN and Twitter Sentiment Analysis",
+      "description": "Self Project",
+      "technologies": [
+        "NLTK Vader",
+        "GAN",
+        "Stock data",
+        "ESMA",
+        "MACD",
+        "Bollinger Bands",
+        "LSTM",
+        "MAPE",
+        "SMAPE"
+      ],
+      "url": "",
+      "bullet_points": [
+        "Utilized NLTK Vader sentiment analysis to process large-scale Twitter datasets on Amazon stock in real-time",
+        "Integrated sentiment signals with historical stock data using technical indicators (ESMA, MA, MACD, Bollinger Bands)",
+        "Deployed advanced Generative Adversarial Networks (GANs) for stock price forecasting with 3.8% MAPE robustness",
+        "Built end-to-end pipeline combining NLP, deep learning, and sentiment signals to capture market financial movements"
+      ],
+      "start_date": "Oct 2024",
+      "end_date": "Nov 2024"
+    },
+    {
+      "name": "Food Demand Forecasting Using Time Series Models",
+      "description": "Self Project",
+      "technologies": [
+        "ARIMA",
+        "SARIMA",
+        "Exponential smoothing",
+        "ML models",
+        "Python",
+        "Langgraph"
+      ],
+      "url": "",
+      "bullet_points": [
+        "Analyzed large-scale meal demand data from Weeks 1\u2013145 using statistical EDA with ACF and PACF to detect autocorrelation patterns",
+        "Implemented ARIMA-X, SARIMA-X, and exponential smoothing models for multi-seasonal demand forecasting with trend adjustments",
+        "Evaluated forecasting accuracy with MAPE of 4.5% and SMAPE of 6.02% on test datasets",
+        "Delivered reproducible forecasting pipeline in Python with structured preprocessing, automated training, and better visualization"
+      ],
+      "start_date": "Nov 2025",
+      "end_date": "Dec 2025"
+    },
+    {
+      "name": "Disease Prediction Using Drug Review Dataset",
+      "description": "Self Project",
+      "technologies": [
+        "Multinomial Naive Bayes",
+        "Passive Aggressive Classifier",
+        "n-gram analysis",
+        "Python",
+        "Langgraph"
+      ],
+      "url": "",
+      "bullet_points": [
+        "Processed 50k+ drug reviews mapped to medical conditions, applying lemmatization, stopword removal, and TF-IDF feature extraction",
+        "Built supervised ML models with Multinomial Naive Bayes and Passive Aggressive Classifier for robust classification",
+        "Optimized predictive models using detailed n-gram analysis and extensive hyperparameter tuning, achieving 98.3% peak accuracy",
+        "Created scalable ML workflow in Python with Langgraph, ensuring reproducibility and high interpretability with feature matrix analysis"
+      ],
+      "start_date": "Jul 2025",
+      "end_date": "Aug 2025"
+    }
+  ],
+  "competitions": [
+    {
+      "name": "Band Gap Prediction in Perovskite Oxides",
+      "event": "Excavate 2025",
+      "location": "",
+      "start_date": "Mar 2025",
+      "end_date": "Jun 2025",
+      "achievements": [
+        "Achieved 2nd position by classifying complex perovskite oxides as insulators vs non-insulators using Random Forest and XGBoost",
+        "Designed advanced regression models to predict band gap values with engineered descriptors and optimized Gradient Boosting",
+        "Performed detailed feature importance analysis and SHAP analysis to identify critical predictive features",
+        "Built scalable ML pipeline in Python with structured preprocessing, automated training, visualization, and reporting workflows"
+      ]
+    }
+  ],
+  "skills_and_expertise": {
+    "languages_skills": [
+      "Python",
+      "C",
+      "C++",
+      "SQL"
+    ],
+    "software": [
+      "Visual Studio",
+      "Jupyter Notebook",
+      "MS Excel",
+      "GitHub",
+      "MySQL",
+      "Docker"
+    ],
+    "libraries_frameworks": [
+      "NumPy",
+      "Pandas",
+      "Matplotlib",
+      "Seaborn",
+      "Scikit Learn",
+      "Pytorch",
+      "Tensorflow",
+      "Keras",
+      "LangChain",
+      "LangGraph"
+    ],
+    "courses": [
+      "Programming & Data Structures",
+      "Probability & Statistics",
+      "AI for Economics",
+      "File Organization & Database Management Systems"
+    ],
+    "soft_skills": [
+      "Team Collaboration",
+      "Problem-Solving",
+      "Communication",
+      "Leadership",
+      "Time Management",
+      "Adaptability",
+      "Critical Thinking"
+    ]
+  },
+  "positions_of_responsibility": [
+    {
+      "title": "Game Dev and Content Head",
+      "organization": "Computer Graphics Society, TSG",
+      "location": "",
+      "start_date": "Jan 2023",
+      "end_date": "Present",
+      "description": "",
+      "bullet_points": [
+        "Implemented player analytics in developed games, tracking engagement metrics and optimizing gameplay balance using data insights",
+        "Designed in-game data pipelines to collect user interaction logs, enabling analysis of player retention, churn, and performance trends",
+        "Applied machine learning models to predict difficulty adjustments, ensuring adaptive gameplay and enhanced player satisfaction",
+        "Visualized game performance with Python and Tableau, providing actionable insights for design iterations and feature updates"
+      ]
+    }
+  ],
+  "coursework": [
+    "Mathematics and Programming: Probability and Statistics",
+    "Linear Algebra",
+    "Core Electronics: Analog Electronics",
+    "Network Theory",
+    "Digital Electronic Circuits",
+    "Signals and Systems",
+    "Electrical Machines",
+    "Online Courses: Advanced Machine Learning (Coursera)",
+    "AWS Basics to Advanced (Udemy)",
+    "Google Data Analytics",
+    "IDM Data Science"
+  ],
+  "extra_curricular_activities": [
+    {
+      "name": "Led fundraising at Khudrapur Foundation",
+      "description": "Raised INR 1.27L to support education & healthcare for underprivileged children"
+    },
+    {
+      "name": "Led a 90+ team producing Diwali illumination and rangoli",
+      "description": "At Radhakrishnan Hall, enhancing creativity and engagement"
+    }
+  ],
+  "publications": [
+    "Publication 1",
+    "Publication 2"
+  ],
+  "awards": [
+    "Award 1",
+    "Award 2"
+  ],
+  "volunteer": [
+    {
+      "organization": "Khudrapur Foundation",
+      "role": "Fundraising Lead",
+      "description": "Supported education & healthcare initiatives for underprivileged children"
+    },
+    {
+      "organization": "Radhakrishnan Hall",
+      "role": "Team Leader",
+      "description": "Organized Diwali illumination and rangoli events"
+    }
+  ],
+  "interests": [
+    "Interest 1",
+    "Interest 2"
+  ],
+  "extraction_version": "1.0",
+  "extracted_at": "2026-01-12T19:06:14.302321"
+}

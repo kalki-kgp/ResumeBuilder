@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
@@ -7,6 +9,7 @@ from app.core.security import decode_access_token
 from app.models.user import User
 from app.services.user_service import UserService
 
+logger = logging.getLogger(__name__)
 security = HTTPBearer()
 
 
@@ -25,6 +28,7 @@ async def get_current_user(
     # Decode token
     payload = decode_access_token(token)
     if payload is None:
+        logger.warning("Auth failed: Invalid or expired token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -34,6 +38,7 @@ async def get_current_user(
     # Get user ID from token
     user_id: str | None = payload.get("sub")
     if user_id is None:
+        logger.warning("Auth failed: Token missing 'sub' claim")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -44,6 +49,7 @@ async def get_current_user(
     user_service = UserService(db)
     user = user_service.get_user_by_id(int(user_id))
     if user is None:
+        logger.warning(f"Auth failed: User ID {user_id} not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found",

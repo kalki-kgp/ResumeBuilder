@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { MouseEvent } from "react";
 
 interface TemplateCardProps {
+    id?: string; // Template ID for reference
     title: string;
     description: string;
     image: string; // Tailwind color or image URL

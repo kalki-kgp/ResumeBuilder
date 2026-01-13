@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
+import logging
 from typing import Any
 
-from jose import JWTError, jwt
+from jose import ExpiredSignatureError, JWTError, jwt
 from passlib.context import CryptContext
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Password hashing context
 # Set truncate_error=False to automatically truncate passwords longer than 72 bytes
@@ -63,5 +66,9 @@ def decode_access_token(token: str) -> dict[str, Any] | None:
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         return payload
-    except JWTError:
+    except ExpiredSignatureError:
+        logger.warning("Token expired")
+        return None
+    except JWTError as e:
+        logger.warning(f"JWT decode error: {e}")
         return None

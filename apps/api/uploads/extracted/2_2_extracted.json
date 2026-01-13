@@ -1,0 +1,126 @@
+{
+  "contact": {
+    "full_name": "KRISHNA KAMALAKAR PAIKINE",
+    "email": "22EE10036@iitkgp.ac.in",
+    "phone": "",
+    "location": "",
+    "linkedin": "",
+    "github": "",
+    "portfolio": "",
+    "other_links": []
+  },
+  "summary": "",
+  "work_experience": [
+    {
+      "job_title": "Software Engineer Intern",
+      "company": "Fruitbowl Media",
+      "location": "",
+      "start_date": "May'25",
+      "end_date": "Aug'25",
+      "is_current": false,
+      "description": "",
+      "bullet_points": [
+        "Designed the full-stack system design of Django backend, React Native app, and Next.js CRM into an unified, scalable ecosystem",
+        "Deployed containerized infrastructure using Kubernetes, Helm, Celery, Redis, AWS S3, and Terraform for seamless orchestration",
+        "Built Secure CI/CD pipelines, enforcing enterprise-grade coding standards, and implemented secrets management for better security",
+        "Project 2: Developed a multi-channel conversational agent to automate practitioner outreach and better customer engagement",
+        "Engineered an AI-driven automation agent integrating LLMs through VLLM, LiveKit framework, Twilio SIP, and WhatsApp APIs",
+        "Automated practitioner outreach and improved customer query handling through agentic workflows and dynamic intent recognition",
+        "Implemented real-time conversation pipelines and context-aware conversational routing to enhance outbound call quality experience",
+        "Integrated PostHog analytics with Kubernetes, enabling real-time event tracking, funnel analysis, and insights for 20+ modules",
+        "Developed a personalized notification system using Django signals and React Native hooks, improving user engagement by 35%",
+        "Orchestrated an AI-driven content generation pipeline to deliver personalized recommendations, increasing session duration by 28%"
+      ],
+      "technologies": [
+        "Django",
+        "React Native",
+        "Next.js",
+        "Kubernetes",
+        "Helm",
+        "Celery",
+        "Redis",
+        "AWS S3",
+        "Terraform",
+        "VLLM",
+        "LiveKit",
+        "Twilio",
+        "WhatsApp",
+        "PostHog"
+      ]
+    },
+    {
+      "job_title": "FedEx Web-App | Inter-IIT Problem Statement",
+      "company": "FedEx",
+      "location": "",
+      "start_date": "Nov'24",
+      "end_date": "Dec'24",
+      "is_current": false,
+      "description": "",
+      "bullet_points": [
+        "Built an interactive Next.js backend with three.js frontend, enabling 3D cargo visualization and improving logistics planning efficiency by 30%",
+        "Integrated a Fast API 3D rendering with real-time optimization, reducing processing delays by 45% and enhancing data retrieval speed",
+        "Engineered a responsive UI with Tailwind CSS and Framer Motion, increasing user engagement by 25% through seamless animations",
+        "Designed a full-stack solution integrating Google Maps API for dynamic warehouse visualization and route optimization",
+        "Implemented a scalable data pipeline using PostgreSQL and Redis for efficient data storage and retrieval, enhancing application performance"
+      ],
+      "technologies": [
+        "Next.js",
+        "three.js",
+        "FastAPI",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Google Maps API",
+        "PostgreSQL",
+        "Redis"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.TECH (Hons.) in ELECTRICAL ENGINEERING",
+      "institution": "IIT Kharagpur",
+      "location": "",
+      "start_date": "",
+      "end_date": "2026",
+      "gpa": "6.11/10",
+      "honors": [],
+      "relevant_coursework": []
+    },
+    {
+      "degree": "HSC",
+      "institution": "Dr. Babasaheb Ambedkar College, Deekshabhoomi Nagpur",
+      "location": "",
+      "start_date": "2022",
+      "end_date": "",
+      "gpa": "78.33%",
+      "honors": [],
+      "relevant_coursework": []
+    },
+    {
+      "degree": "SSC",
+      "institution": "Naveevan Dnyaanpeeth English Medium School, Pusad",
+      "location": "",
+      "start_date": "2022",
+      "end_date": "",
+      "gpa": "94.20%",
+      "honors": [],
+      "relevant_coursework": []
+    }
+  ],
+  "technical_skills": [],
+  "soft_skills": [],
+  "skills_by_category": {
+    "Programming Languages": [],
+    "Frameworks": [],
+    "Tools": []
+  },
+  "projects": [],
+  "certifications": [],
+  "languages": [],
+  "publications": [],
+  "awards": [],
+  "volunteer": [],
+  "interests": [],
+  "extraction_version": "1.0",
+  "extracted_at": "2026-01-13T00:40:02.664868"
+}
